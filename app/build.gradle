@@ -1,0 +1,176 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions' //扩展插件
+apply plugin: 'kotlin-kapt'  //kapt3插件
+
+// 依赖插件脚本
+apply from: 'tinker-support.gradle'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'ktmp'
+            keyPassword 'ktmp123456'
+            storeFile file('../ktmp.jks')
+            storePassword 'ktmp123456'
+        }
+    }
+
+    //其他配置
+
+//    signingConfigs {
+//
+//        config {
+//            keyAlias 'key0'
+//            keyPassword '921215'
+//            storeFile file('D:\\fireman\\Documents\\Mykey\\KotlinMvp.jks')
+//            storePassword '921215'
+//        }
+//    }
+
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.hazz.kotlinmvp"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 6
+        versionName "1.5.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                includeCompileClasspath true
+//            }
+//        }
+//        signingConfig signingConfigs.config
+        // 实现毛玻璃那种透明的效果需要添加的库
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true    // Enable RS support
+
+        ndk {
+
+            //APP的build.gradle设置支持的SO库架构
+//            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+        multiDexEnabled true
+    }
+    buildTypes {
+//        debug {
+//            minifyEnabled false
+//            debuggable true
+////            signingConfig signingConfigs.config
+//        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            debuggable false
+//            signingConfig signingConfigs.config
+//            zipAlignEnabled true
+        }
+
+    }
+    // 自定义输出配置
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.all {
+//            outputFileName = "kotlinmvp_v${variant.versionName}_${variant.name}.apk"
+//        }
+//    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+    }
+
+    dexOptions {
+        jumboMode true
+    }
+
+//    kapt {
+//        generateStubs = true
+//        mapDiagnosticLocations = true
+//    }
+
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Support库
+//    implementation rootProject.ext.supportLibs
+    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:support-annotations:27.1.0'
+
+    // 网络请求库
+//    implementation rootProject.ext.networkLibs
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    // RxJava2
+//    implementation rootProject.ext.rxJavaLibs
+//    implementation rootProject.ext.otherLibs
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+
+    // APT dependencies(Kotlin内置的注解处理器)
+    kapt 'com.github.bumptech.glide:compiler:4.0.0'
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    // 底部菜单
+    implementation('com.flyco.tablayout:FlycoTabLayout_Lib:2.1.0@aar') {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    //kotlin 支持库
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //GlideOkHttp
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.0.0') {
+        exclude group: 'glide-parent'
+    }
+    //smartRefreshLayout 下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
+    //Banner
+    implementation 'cn.bingoogolapple:bga-banner:2.1.8@aar'
+    // 视屏播放器
+    implementation 'com.shuyu:GSYVideoPlayer:2.1.1'
+    //Logger
+    implementation 'com.orhanobut:logger:2.1.1'
+    //Google开源的一个布局控件
+    implementation 'com.google.android:flexbox:0.3.1'
+    implementation project(':multiple-status-view')
+    //模糊透明 View
+    implementation 'com.github.mmin18:realtimeblurview:1.1.0'
+    //leakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    //运行时权限
+    implementation 'me.weyye.hipermission:library:1.0.7'
+
+    //腾讯 bugly
+//    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation "com.android.support:multidex:1.0.3" // 多dex配置
+    //注释掉原有bugly的仓库
+    //compile 'com.tencent.bugly:crashreport:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.3.4
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.6'
+    // 指定tinker依赖版本（注：应用升级1.3.5版本起，不再内置tinker）
+    implementation 'com.tencent.tinker:tinker-android-lib:1.9.9'
+    implementation 'com.tencent.bugly:nativecrashreport:3.3.1' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+
+}
